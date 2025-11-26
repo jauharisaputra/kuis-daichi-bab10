@@ -6,7 +6,6 @@
     <title>Kuis Daichi Bab 10</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        /* Warna tema */
         :root {
             --primary: #2b90d9;
             --primary-dark: #005491;
@@ -259,9 +258,7 @@
         <div id="result" class="hidden"></div>
         <div id="history"></div>
     </div>
-
     <script>
-        // Array soal 30 butir Bab 10 (sama seperti versi sebelumnya)
         const questions = [{
                 text: "「リンさんは だれ に プレゼントを あげましたか。」 Jawablah!",
                 options: ["キムさん", "まりさん", "母", "友だち"],
@@ -340,7 +337,8 @@
             {
                 text: "Kalimat tanya yang benar untuk menanyakan 'Siapa yang menerima hadiah?'",
                 options: ["だれ に プレゼントを あげましたか。", "いつ に プレゼントを あげましたか。", "どこ に プレゼントを あげましたか。",
-                    "なん に プレゼントを あげましたか。"],
+                    "なん に プレゼントを あげましたか。"
+                ],
                 answer: 0
             },
             {
@@ -421,8 +419,7 @@
             }
         ];
 
-        // Kuis logic
-        const QUIZ_TIME_LIMIT = 3600; // 60 menit
+        const QUIZ_TIME_LIMIT = 3600;
         let currentIndex = 0;
         let score = 0;
         let timer = null;
@@ -453,7 +450,7 @@
             timeLeft = QUIZ_TIME_LIMIT;
             startTimer();
             showQuestion();
-            nextBtn.style.display = "block"; // Show tombol next setelah mulai kuis
+            nextBtn.style.display = "block";
         });
 
         function startTimer() {
@@ -522,7 +519,7 @@
             resultDiv.innerHTML =
                 `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> / <span>${total}</span><br><b>Nilai: ${nilai}</b> <span>(${keterangan})</span>`;
 
-            // Simpan ke localStorage
+            // Simpan ke localStorage di browser
             const record = {
                 nama,
                 kelas,
@@ -536,6 +533,22 @@
             data.push(record);
             localStorage.setItem("daichi_bab10_results", JSON.stringify(data));
             showHistory();
+
+            // Kirim ke backend Express
+            fetch('http://localhost:3000/hasil-kuis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(record)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Nilai berhasil dikirim dan disimpan di server:', data);
+                })
+                .catch(error => {
+                    console.error('Gagal mengirim nilai ke server:', error);
+                });
         }
 
         function showHistory() {
@@ -548,8 +561,8 @@
             data.slice(-7).reverse().forEach((r) => {
                 html += `<li>
           <b>${r.nama}</b> (${r.kelas})<br>
-          Skor: <span style="color:${r.nilai>=70?'#24ba63':'#ee3054'};">${r.skor}/${r.total}</span> 
-          <span style="font-weight:700;color:${r.nilai>=70?'#24ba63':'#ee3054'};">[${r.nilai}, ${r.keterangan}]</span> 
+          Skor: <span style="color:${r.nilai>=70?'#24ba63':'#ee3054'};">${r.skor}/${r.total}</span>
+          <span style="font-weight:700;color:${r.nilai>=70?'#24ba63':'#ee3054'};">[${r.nilai}, ${r.keterangan}]</span>
           <br>${r.tanggal}
         </li>`;
             });
