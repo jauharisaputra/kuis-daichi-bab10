@@ -232,6 +232,15 @@
                 padding: 7px 10px 7px 7px;
             }
         }
+
+        .question,
+        .options,
+        .option-btn {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
     </style>
 </head>
 
@@ -451,6 +460,8 @@
             startTimer();
             showQuestion();
             nextBtn.style.display = "block";
+            // Tambah baris ini untuk menyembunyikan tombol Mulai Kuis
+            startBtn.style.display = "none";
         });
 
         function startTimer() {
