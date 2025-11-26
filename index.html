@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kuis Daichi Bab 10</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Warna tema */
+        :root {
+            --primary: #2b90d9;
+            --primary-dark: #005491;
+            --success: #24ba63;
+            --danger: #ee3054;
+            --accent: #fad46b;
+            --bg: #f5f7fb;
+            --question-bg: #fff;
+            --card-shadow: 0 5px 24px rgba(0, 0, 10, 0.09);
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .quiz-container {
+            background: var(--question-bg);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            width: 430px;
+            max-width: 99vw;
+            margin: 36px auto;
+            padding: 2.6em 1em 2em 1em;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-dark);
+            font-size: 2rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .input-group label {
+            font-size: 1.07rem;
+            margin-bottom: 4px;
+            color: var(--primary-dark);
+            margin-top: 12px;
+            display: block;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            font-size: 1.07rem;
+            padding: 10px;
+            border-radius: 7px;
+            border: 1.2px solid #aedbfa;
+            background: #eef7fc;
+            margin-bottom: 9px;
+            box-sizing: border-box;
+        }
+
+        #startBtn {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            padding: 14px;
+            margin-top: 6px;
+            font-size: 1.16rem;
+            font-weight: bold;
+            letter-spacing: .4px;
+            cursor: pointer;
+            transition: background .17s;
+            box-shadow: 0 2px 9px rgba(43, 144, 217, 0.11);
+        }
+
+        #startBtn:hover {
+            background: var(--primary-dark);
+        }
+
+        #timer {
+            display: block;
+            text-align: right;
+            font-size: 1.13rem;
+            font-weight: 600;
+            color: var(--danger);
+            background: var(--accent);
+            border-radius: 7px;
+            padding: 7px 18px 7px 7px;
+            margin-bottom: 10px;
+            margin-top: -14px;
+            width: fit-content;
+            float: right;
+        }
+
+        .question {
+            background: var(--accent);
+            color: var(--primary-dark);
+            border-radius: 9px;
+            box-shadow: 0 2px 10px rgba(218, 176, 0, .09);
+            font-size: 1.18rem;
+            font-weight: 600;
+            padding: 1.1em 0.8em;
+            margin-bottom: 18px;
+            min-height: 60px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 17px;
+        }
+
+        .option-btn {
+            background: #edf7ff;
+            color: var(--primary-dark);
+            border: 2px solid #cbe6fa;
+            padding: 13px;
+            border-radius: 9px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.17s;
+            font-weight: 500;
+            box-shadow: 0 2px 7px rgba(20, 90, 200, 0.03);
+            text-align: left;
+        }
+
+        .option-btn:hover,
+        .option-btn.selected {
+            background: var(--primary);
+            color: #fff;
+            border: 2px solid var(--primary-dark);
+            transform: scale(1.04);
+        }
+
+        #nextBtn {
+            width: 100%;
+            background: var(--accent);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 9px;
+            padding: 13px;
+            font-size: 1.09rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 6px;
+            letter-spacing: .4px;
+            box-shadow: 0 2px 9px rgba(246, 212, 107, 0.08);
+            display: none;
+            transition: background .14s;
+        }
+
+        #nextBtn:hover {
+            background: #ffe58a;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 1.23rem;
+            font-weight: bold;
+            margin: 22px 0 8px 0;
+            padding: 1em;
+            border-radius: 11px;
+        }
+
+        #result.passed {
+            background: #e4fbe7;
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        #result.remedial {
+            background: #ffe6ee;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        #history {
+            margin-top: 14px;
+            background: #f6fafe;
+            border-radius: 8px;
+            padding: 1em;
+            font-size: .98rem;
+            color: #444457;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        #history h2 {
+            color: var(--primary-dark);
+            font-size: 1.07rem;
+            margin-bottom: 7px;
+            text-align: left;
+        }
+
+        #history li {
+            margin-bottom: 5px;
+            font-size: .98em;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-container {
+                width: 97vw;
+                min-width: 94vw;
+                padding: 1.7em .1em 1.5em .1em;
+            }
+
+            h1 {
+                font-size: 1.17rem
+            }
+
+            .question {
+                font-size: 1.02rem
+            }
+
+            #result {
+                font-size: 1rem
+            }
+
+            #timer {
+                font-size: 1.04rem;
+                padding: 7px 10px 7px 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>Kuis Daichi Bab 10</h1>
+        <div id="student-info">
+            <div class="input-group">
+                <label for="studentName">Nama:</label>
+                <input type="text" id="studentName" autocomplete="name">
+            </div>
+            <div class="input-group">
+                <label for="studentClass">Kelas:</label>
+                <input type="text" id="studentClass" value="Suginami" autocomplete="class">
+            </div>
+            <button id="startBtn">Mulai Kuis</button>
+        </div>
+        <div id="quizArea" class="hidden">
+            <span id="timer">60:00</span>
+            <div id="questionText" class="question"></div>
+            <div id="options" class="options"></div>
+            <button id="nextBtn">Soal berikutnya</button>
+        </div>
+        <div id="result" class="hidden"></div>
+        <div id="history"></div>
+    </div>
+
+    <script>
+        // Array soal 30 butir Bab 10 (sama seperti versi sebelumnya)
+        const questions = [{
+                text: "「リンさんは だれ に プレゼントを あげましたか。」 Jawablah!",
+                options: ["キムさん", "まりさん", "母", "友だち"],
+                answer: 0
+            },
+            {
+                text: "「母 に 傘を 貸しました。」 Siapa penerima payung?",
+                options: ["Saya", "Ibu", "Kim-san", "Marie-san"],
+                answer: 1
+            },
+            {
+                text: "Apa fungsi partikel 「に」 pada kalimat '友だち に 手紙を 送ります。'?",
+                options: ["Kepada", "Dari", "Dengan", "Untuk"],
+                answer: 0
+            },
+            {
+                text: "「リンさんは だれ に 辞書を 借りましたか。」 Jawaban yang tepat adalah ...",
+                options: ["まりさん", "母", "自分", "友だち"],
+                answer: 0
+            },
+            {
+                text: "「りんごを いくつ 買いましたか。」 Jawabannya adalah ...",
+                options: ["ななつ", "よっつ", "いつつ", "みっつ"],
+                answer: 0
+            },
+            {
+                text: "Apa arti kata tanya 「いくつ」 pada Bab 10?",
+                options: ["Berapa (buah)", "Di mana", "Siapa", "Kapan"],
+                answer: 0
+            },
+            {
+                text: "Bagaimana menanyakan 'pakai alat apa makan sushi?' dalam bahasa Jepang?",
+                options: ["なんで すしを 食べますか。", "どこで すしを 食べますか。", "だれで すしを 食べますか。", "いつで すしを 食べますか。"],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang benar: 'Makan sushi dengan sumpit.'",
+                options: ["はし で すしを 食べます。", "はし に すしを 食べます。", "すし で はしを 食べます。", "はし を すしで 食べます。"],
+                answer: 0
+            },
+            {
+                text: "「教室 で 日本語を 勉強します。」 Fungsi partikel 「で」 adalah ...",
+                options: ["Tempat", "Arah", "Waktu", "Objek"],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang tepat: 'Menulis surat dengan pulpen.'",
+                options: ["ボールペン で 手紙を 書きます。", "手紙 で ボールペンを 書きます。", "ボールペン に 手紙を 書きます。", "手紙 を ボールペンで 書きます。"],
+                answer: 0
+            },
+            {
+                text: "「日曜日 に 友だち の 家 へ 行きます。」 Apa arti 「に」 pada kalimat di atas?",
+                options: ["Waktu", "Tempat alat", "Alat", "Objek"],
+                answer: 0
+            },
+            {
+                text: "「なんで 学校へ 行きますか。」 Jawaban yang benar ...",
+                options: ["くるまで 学校へ 行きます。", "学校で 行きます。", "うちで 行きます。", "ともだちに 行きます。"],
+                answer: 0
+            },
+            {
+                text: "「自転車 で スーパーへ 行きます。」 Bagaimana pergi ke supermarket?",
+                options: ["Dengan sepeda", "Dengan mobil", "Dengan teman", "Dengan bus"],
+                answer: 0
+            },
+            {
+                text: "Partikel yang digunakan untuk menyatakan alat pada aktivitas:",
+                options: ["で", "に", "の", "が"],
+                answer: 0
+            },
+            {
+                text: "「先生 に レポートを 出します。」 Siapa yang menerima laporan?",
+                options: ["Guru", "Siswa", "Teman", "Ibu"],
+                answer: 0
+            },
+            {
+                text: "Kalimat tanya yang benar untuk menanyakan 'Siapa yang menerima hadiah?'",
+                options: ["だれ に プレゼントを あげましたか。", "いつ に プレゼントを あげましたか。", "どこ に プレゼントを あげましたか。",
+                    "なん に プレゼントを あげましたか。"],
+                answer: 0
+            },
+            {
+                text: "「ともだち に コピーを あげます。」 Siapa yang memberi salinan?",
+                options: ["Saya", "Teman", "Guru", "Ibu"],
+                answer: 0
+            },
+            {
+                text: "Kalimat: 'Makan nasi dengan tangan.' bagaimana dalam bahasa Jepang?",
+                options: ["手 で ごはんを 食べます。", "ごはん で 手を 食べます。", "手 に ごはんを 食べます。", "ごはん を 手で 食べます。"],
+                answer: 0
+            },
+            {
+                text: "Bagaimana menanyakan jumlah apel yang dibeli?",
+                options: ["りんごを いくつ 買いましたか。", "りんごは どこで 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。"],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang benar untuk 'Ibu menerima bunga dari Marie-san.'",
+                options: ["母 は まりさん に 花を もらいました。", "母 は まりさん で 花を もらいました。", "母 は まりさん を 花で もらいました。",
+                    "母 は まりさん に 花で もらいました。"
+                ],
+                answer: 0
+            },
+            {
+                text: "Pilihan jawaban yang benar untuk 'Aku menerima hadiah dari teman.'",
+                options: ["わたし は ともだち に プレゼントを もらいました。", "わたし は ともだち に プレゼントを あげました。",
+                    "わたし は ともだち で プレゼントを もらいました。", "わたし は ともだち が プレゼントを もらいました。"
+                ],
+                answer: 0
+            },
+            {
+                text: "Maksud dari kalimat 'ともだち に 本を かしました。'",
+                options: ["Memberi pinjaman buku kepada teman", "Menerima buku dari teman",
+                    "Membaca buku bersama teman", "Menulis buku untuk teman"
+                ],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang benar untuk 'Menulis dengan pensil.'",
+                options: ["えんぴつ で 書きます。", "えんぴつ に 書きます。", "えんぴつ は 書きます。", "えんぴつ を 書きます。"],
+                answer: 0
+            },
+            {
+                text: "『だれ に あげましたか。』 cocok dijawab dengan ...",
+                options: ["ともだち に あげました。", "きょうしつ で あげました。", "はな で あげました。", "きょう に あげました。"],
+                answer: 0
+            },
+            {
+                text: "Cara bertanya 'Kepada siapa kamu mengirim surat?' dalam bahasa Jepang:",
+                options: ["だれ に 手紙を 送りましたか。", "どこ で 手紙を 送りましたか。", "なん で 手紙を 送りましたか。", "いつ に 手紙を 送りましたか。"],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang benar untuk 'Saya belajar Bahasa Jepang di perpustakaan.'",
+                options: ["図書館 で 日本語を 勉強します。", "日本語 の 図書館で 勉強します。", "日本語 で 図書館を 勉強します。", "図書館 が 日本語で 勉強します。"],
+                answer: 0
+            },
+            {
+                text: "Partikel yang tepat untuk tempat melakukan aktivitas:",
+                options: ["で", "に", "が", "を"],
+                answer: 0
+            },
+            {
+                text: "Bagaimana menulis 'Saya memilih ayam.' dengan pola Bab 10?",
+                options: ["とり に します。", "とり で します。", "とり を します。", "とり が します。"],
+                answer: 0
+            },
+            {
+                text: "Kalimat yang benar: 'Saya pergi ke sekolah dengan bus.'",
+                options: ["バス で 学校へ 行きます。", "バス に 学校へ 行きます。", "学校 で バスへ 行きます。", "バス を 学校へ 行きます。"],
+                answer: 0
+            },
+            {
+                text: "Cara menanyakan 'Berapa buah apel yang dibeli?' dalam bahasa Jepang:",
+                options: ["りんごを いくつ 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。", "りんごは どこで 買いましたか。"],
+                answer: 0
+            }
+        ];
+
+        // Kuis logic
+        const QUIZ_TIME_LIMIT = 3600; // 60 menit
+        let currentIndex = 0;
+        let score = 0;
+        let timer = null;
+        let timeLeft = QUIZ_TIME_LIMIT;
+        let selectedOption = null;
+
+        const studentNameInput = document.getElementById("studentName");
+        const studentClassInput = document.getElementById("studentClass");
+        const startBtn = document.getElementById("startBtn");
+        const quizArea = document.getElementById("quizArea");
+        const questionText = document.getElementById("questionText");
+        const optionsDiv = document.getElementById("options");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerSpan = document.getElementById("timer");
+        const resultDiv = document.getElementById("result");
+        const historyDiv = document.getElementById("history");
+
+        startBtn.addEventListener("click", () => {
+            if (!studentNameInput.value.trim()) {
+                alert("Isi nama siswa dulu.");
+                studentNameInput.focus();
+                return;
+            }
+            document.getElementById("student-info").classList.add("hidden");
+            quizArea.classList.remove("hidden");
+            currentIndex = 0;
+            score = 0;
+            timeLeft = QUIZ_TIME_LIMIT;
+            startTimer();
+            showQuestion();
+            nextBtn.style.display = "block"; // Show tombol next setelah mulai kuis
+        });
+
+        function startTimer() {
+            timerSpan.textContent = formatTime(timeLeft);
+            timer = setInterval(() => {
+                timeLeft--;
+                timerSpan.textContent = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function formatTime(t) {
+            const min = Math.floor(t / 60);
+            const sec = t % 60;
+            return `${min < 10 ? "0" : ""}${min}:${sec < 10 ? "0" : ""}${sec}`;
+        }
+
+        function showQuestion() {
+            const q = questions[currentIndex];
+            questionText.textContent = `Soal ${currentIndex + 1} dari ${questions.length}: ${q.text}`;
+            optionsDiv.innerHTML = "";
+            selectedOption = null;
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement("button");
+                btn.textContent = opt;
+                btn.className = "option-btn";
+                btn.onclick = () => {
+                    selectedOption = index;
+                    Array.from(optionsDiv.children).forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+                };
+                optionsDiv.appendChild(btn);
+            });
+            nextBtn.textContent = currentIndex < questions.length - 1 ? "Soal berikutnya" : "Selesai & Lihat Nilai";
+        }
+
+        nextBtn.addEventListener("click", () => {
+            if (selectedOption === null) {
+                alert("Pilih dulu jawabannya.");
+                return;
+            }
+            if (selectedOption === questions[currentIndex].answer) {
+                score++;
+            }
+            currentIndex++;
+            if (currentIndex < questions.length) {
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        });
+
+        function finishQuiz() {
+            clearInterval(timer);
+            quizArea.classList.add("hidden");
+            const nama = studentNameInput.value.trim();
+            const kelas = studentClassInput.value.trim();
+            const total = questions.length;
+            const nilai = Math.round((score / total) * 100);
+            const keterangan = nilai >= 70 ? "Lulus" : "Perlu Remedial";
+            resultDiv.classList.remove("hidden");
+            resultDiv.className = keterangan === "Lulus" ? "passed" : "remedial";
+            resultDiv.innerHTML =
+                `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> / <span>${total}</span><br><b>Nilai: ${nilai}</b> <span>(${keterangan})</span>`;
+
+            // Simpan ke localStorage
+            const record = {
+                nama,
+                kelas,
+                skor: score,
+                total,
+                nilai,
+                keterangan,
+                tanggal: new Date().toLocaleString()
+            };
+            let data = JSON.parse(localStorage.getItem("daichi_bab10_results")) || [];
+            data.push(record);
+            localStorage.setItem("daichi_bab10_results", JSON.stringify(data));
+            showHistory();
+        }
+
+        function showHistory() {
+            const data = JSON.parse(localStorage.getItem("daichi_bab10_results")) || [];
+            if (data.length === 0) {
+                historyDiv.innerHTML = "";
+                return;
+            }
+            let html = "<h2>Riwayat Nilai Bab 10</h2><ul>";
+            data.slice(-7).reverse().forEach((r) => {
+                html += `<li>
+          <b>${r.nama}</b> (${r.kelas})<br>
+          Skor: <span style="color:${r.nilai>=70?'#24ba63':'#ee3054'};">${r.skor}/${r.total}</span> 
+          <span style="font-weight:700;color:${r.nilai>=70?'#24ba63':'#ee3054'};">[${r.nilai}, ${r.keterangan}]</span> 
+          <br>${r.tanggal}
+        </li>`;
+            });
+            html += "</ul>";
+            historyDiv.innerHTML = html;
+        }
+        showHistory();
+    </script>
+</body>
+
+</html>
