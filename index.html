@@ -523,20 +523,26 @@
             const nama = studentNameInput.value.trim();
             const kelas = studentClassInput.value.trim();
             const total = questions.length;
-            const nilai = Math.round((score / total) * 100);
-            const keterangan = nilai >= 70 ? "Lulus" : "Perlu Remedial";
+            let nilai = Math.round((score / total) * 100);
+            let penalti = window.screenshotDetected ? window.screenshotDetected * 5 : 0;
+            let nilaiAkhir = Math.max(0, nilai - penalti);
+            const keterangan = nilaiAkhir >= 70 ? "Lulus" : "Perlu Remedial";
             resultDiv.classList.remove("hidden");
             resultDiv.className = keterangan === "Lulus" ? "passed" : "remedial";
             resultDiv.innerHTML =
-                `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> / <span>${total}</span><br><b>Nilai: ${nilai}</b> <span>(${keterangan})</span>`;
+                `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> /
+<span>${total}</span><br><b>Nilai: ${nilaiAkhir}</b> <span>(${keterangan})</span>${penalti > 0 ? "<br><span
+    style='color:#ee3054'><b>Penalti screenshot: -" + penalti + "</b></span>" : ""}`;
 
-            // Simpan ke localStorage di browser
+            // Simpan ke localStorage dan kirim ke backend
             const record = {
                 nama,
                 kelas,
                 skor: score,
                 total,
-                nilai,
+                nilai: nilaiAkhir,
+                penalti,
+                screenshotCount: window.screenshotDetected || 0,
                 keterangan,
                 tanggal: new Date().toLocaleString()
             };
@@ -545,7 +551,6 @@
             localStorage.setItem("daichi_bab10_results", JSON.stringify(data));
             showHistory();
 
-            // Kirim ke backend Express
             fetch('http://localhost:3000/hasil-kuis', {
                     method: 'POST',
                     headers: {
@@ -581,6 +586,40 @@
             historyDiv.innerHTML = html;
         }
         showHistory();
+        // ==== Proteksi Copy, Paste, Cut dan Klik Kanan ====
+        document.addEventListener('keydown', function (e) {
+            const isQuizArea = e.target.closest('.question') || e.target.closest('.options');
+            if (isQuizArea && (e.ctrlKey || e.metaKey)) {
+                if (['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
+                    e.preventDefault();
+                    alert('Akses copy/paste dinonaktifkan!');
+                }
+            }
+        });
+        ['copy', 'cut', 'paste'].forEach(ev => {
+            document.addEventListener(ev, function (e) {
+                const isQuizArea = e.target.closest('.question') || e.target.closest('.options');
+                if (isQuizArea) {
+                    e.preventDefault();
+                    alert('Akses copy/paste dinonaktifkan!');
+                }
+            });
+        });
+        document.addEventListener('contextmenu', function (e) {
+            if (e.target.closest('.question') || e.target.closest('.options')) {
+                e.preventDefault();
+                alert('Klik kanan dinonaktifkan!');
+            }
+        });
+
+        // ==== Proteksi Screenshot (PrintScreen) ====
+        window.screenshotDetected = 0;
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'PrintScreen') {
+                window.screenshotDetected++;
+                alert('Screen capture terdeteksi! Poin Anda akan dikurangi 5 poin.');
+            }
+        });
     </script>
 </body>
 
