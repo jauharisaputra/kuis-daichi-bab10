@@ -7,239 +7,269 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         :root {
-            --primary: #2b90d9;
-            --primary-dark: #005491;
+            --primary: #3678c7;
+            --primary-dark: #225a8a;
             --success: #24ba63;
             --danger: #ee3054;
-            --accent: #fad46b;
-            --bg: #f5f7fb;
+            --accent: #fecd57;
+            --bg: #f0f4fa;
+            --header-bg: #b4c7e7;
             --question-bg: #fff;
-            --card-shadow: 0 5px 24px rgba(0, 0, 10, 0.09);
+            --card-shadow: 0 6px 32px 0 #2b90d91a;
         }
 
+        /* Body umum */
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg);
-            margin: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #b4c, #b4c7e7 80%);
+            color: #222;
+            font-size: 20px;
         }
 
+        /* Kuis container */
         .quiz-container {
             background: var(--question-bg);
-            border-radius: 16px;
+            border-radius: 22px;
             box-shadow: var(--card-shadow);
-            width: 430px;
-            max-width: 99vw;
-            margin: 36px auto;
-            padding: 2.6em 1em 2em 1em;
+            max-width: 480px;
+            width: 95vw;
+            margin: 40px auto 20px auto;
+            padding: 2.8em 1.5em 2.2em 1.5em;
             position: relative;
+            border: 2.5px solid #b4c;
         }
 
+        /* Header dan judul kuis */
         h1 {
             text-align: center;
-            color: var(--primary-dark);
-            font-size: 2rem;
+            background: var(--header-bg);
+            color: #1a3e6e;
+            font-size: 2.2rem;
             letter-spacing: 1px;
-            margin-bottom: 14px;
-            font-weight: 700;
+            margin: -32px -20px 22px -20px;
+            padding: 20px 6px 18px 6px;
+            font-weight: bold;
+            border-radius: 16px 16px 0 0;
+            border-bottom: 3px dotted #fff;
+            box-shadow: 0 5px 15px #b4c7e73a;
         }
 
+        /* Form nama dan kelas */
         .input-group label {
-            font-size: 1.07rem;
+            font-size: 1.17rem;
             margin-bottom: 4px;
             color: var(--primary-dark);
-            margin-top: 12px;
+            margin-top: 14px;
+            font-weight: 500;
             display: block;
         }
 
         .input-group input[type="text"] {
             width: 100%;
-            font-size: 1.07rem;
-            padding: 10px;
-            border-radius: 7px;
-            border: 1.2px solid #aedbfa;
-            background: #eef7fc;
-            margin-bottom: 9px;
+            font-size: 1.13rem;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1.7px solid #acd6ed;
+            background: #eef7ff;
+            margin-bottom: 12px;
             box-sizing: border-box;
         }
 
-        #startBtn {
+        /* Tombol Mulai dan Next */
+        #startBtn,
+        #nextBtn {
             width: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), #1869c2 82%);
             color: #fff;
             border: none;
-            border-radius: 9px;
-            padding: 14px;
-            margin-top: 6px;
-            font-size: 1.16rem;
+            border-radius: 12px;
+            padding: 16px 0;
+            margin-top: 12px;
+            font-size: 1.24rem;
             font-weight: bold;
-            letter-spacing: .4px;
+            letter-spacing: .6px;
             cursor: pointer;
-            transition: background .17s;
-            box-shadow: 0 2px 9px rgba(43, 144, 217, 0.11);
+            transition: background .17s, transform .1s;
+            box-shadow: 0 3px 12px rgba(43, 144, 217, 0.10);
         }
 
-        #startBtn:hover {
+        #startBtn:hover,
+        #nextBtn:hover {
             background: var(--primary-dark);
+            box-shadow: 0 4px 14px #225a8a2b;
+            transform: scale(1.04);
         }
 
+        /* Timer */
         #timer {
             display: block;
             text-align: right;
-            font-size: 1.13rem;
+            font-size: 1.21rem;
             font-weight: 600;
             color: var(--danger);
             background: var(--accent);
-            border-radius: 7px;
-            padding: 7px 18px 7px 7px;
-            margin-bottom: 10px;
-            margin-top: -14px;
+            border-radius: 8px;
+            padding: 7px 18px 7px 10px;
+            margin-bottom: 8px;
+            margin-top: -22px;
             width: fit-content;
             float: right;
+            font-family: 'Segoe UI Semibold', Arial, sans-serif;
+            letter-spacing: 2px;
         }
 
+        /* Soal */
         .question {
             background: var(--accent);
             color: var(--primary-dark);
-            border-radius: 9px;
-            box-shadow: 0 2px 10px rgba(218, 176, 0, .09);
-            font-size: 1.18rem;
+            border-radius: 13px;
+            font-size: 1.21rem;
             font-weight: 600;
-            padding: 1.1em 0.8em;
-            margin-bottom: 18px;
-            min-height: 60px;
+            padding: 1.22em 1em;
+            margin-bottom: 20px;
+            min-height: 62px;
+            box-shadow: 0 3px 16px rgba(200, 200, 0, .11);
         }
 
+        /* Pilihan Jawaban */
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 17px;
+            gap: 14px;
+            margin-bottom: 19px;
         }
 
         .option-btn {
-            background: #edf7ff;
+            background: #e9f1fa;
             color: var(--primary-dark);
-            border: 2px solid #cbe6fa;
-            padding: 13px;
-            border-radius: 9px;
-            font-size: 1rem;
+            border: 2px solid #b9dafe;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1.07rem;
             cursor: pointer;
-            transition: all 0.17s;
             font-weight: 500;
-            box-shadow: 0 2px 7px rgba(20, 90, 200, 0.03);
+            box-shadow: 0 2px 7px rgba(20, 90, 200, 0.05);
             text-align: left;
+            transition: all .17s, background .19s;
         }
 
         .option-btn:hover,
         .option-btn.selected {
-            background: var(--primary);
+            background: linear-gradient(90deg, #85baff 50%, #3678c7 90%);
             color: #fff;
             border: 2px solid var(--primary-dark);
-            transform: scale(1.04);
+            box-shadow: 0 4px 10px #3678c75c;
         }
 
-        #nextBtn {
-            width: 100%;
-            background: var(--accent);
-            color: var(--primary-dark);
-            border: none;
-            border-radius: 9px;
-            padding: 13px;
-            font-size: 1.09rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 6px;
-            letter-spacing: .4px;
-            box-shadow: 0 2px 9px rgba(246, 212, 107, 0.08);
-            display: none;
-            transition: background .14s;
-        }
-
-        #nextBtn:hover {
-            background: #ffe58a;
-        }
-
+        /* Hasil */
         #result {
             text-align: center;
-            font-size: 1.23rem;
+            font-size: 1.33rem;
             font-weight: bold;
-            margin: 22px 0 8px 0;
-            padding: 1em;
-            border-radius: 11px;
+            margin: 30px 0 12px 0;
+            padding: 1.25em;
+            border-radius: 15px;
+            background: #f3faf5;
+            color: var(--primary-dark);
+            border: 2px dashed #c8e9ec;
+            box-shadow: 0 1px 7px #c6dff54a;
         }
 
         #result.passed {
-            background: #e4fbe7;
+            background: #eafbe9;
             color: var(--success);
-            border: 2px solid var(--success);
+            border: 2px solid #24ba63;
         }
 
         #result.remedial {
-            background: #ffe6ee;
+            background: #fff1f5;
             color: var(--danger);
-            border: 2px solid var(--danger);
+            border: 2px solid #ee3054;
         }
 
+        /* History */
         #history {
-            margin-top: 14px;
+            margin-top: 20px;
             background: #f6fafe;
-            border-radius: 8px;
-            padding: 1em;
-            font-size: .98rem;
-            color: #444457;
-            max-height: 200px;
+            border-radius: 12px;
+            padding: 1.2em;
+            font-size: 1rem;
+            color: #333;
+            max-height: 220px;
             overflow-y: auto;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 1px 8px #3678c71f;
         }
 
-        #history h2 {
-            color: var(--primary-dark);
-            font-size: 1.07rem;
-            margin-bottom: 7px;
-            text-align: left;
-        }
+        /* Responsive Breakpoints */
+        @media (max-width: 750px) {
+            .quiz-container {
+                max-width: 98vw;
+                padding: 1em .25em 1.3em .25em;
+            }
 
-        #history li {
-            margin-bottom: 5px;
-            font-size: .98em;
+            h1 {
+                font-size: 1.23rem;
+                padding: 14px 1px 10px 1px;
+            }
+
+            .question {
+                font-size: 1.04rem;
+            }
+
+            #result {
+                font-size: 1.09rem;
+            }
+
+            #timer {
+                font-size: 1.05rem;
+            }
+
+            #startBtn,
+            #nextBtn,
+            .option-btn {
+                font-size: 1rem;
+            }
         }
 
         @media (max-width: 500px) {
             .quiz-container {
-                width: 97vw;
-                min-width: 94vw;
-                padding: 1.7em .1em 1.5em .1em;
+                padding: .7em .06em .95em .06em;
+                border-radius: 0;
+                margin: .25em 0 0 0;
             }
 
             h1 {
-                font-size: 1.17rem
+                font-size: 1.07rem
             }
 
             .question {
-                font-size: 1.02rem
+                font-size: .92rem
             }
 
             #result {
-                font-size: 1rem
+                font-size: .97rem
             }
 
             #timer {
-                font-size: 1.04rem;
+                font-size: .99rem;
                 padding: 7px 10px 7px 7px;
             }
         }
 
+        body,
+        .quiz-container,
         .question,
         .options,
-        .option-btn {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+        .option-btn,
+        h1,
+        #result,
+        #history {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
         }
     </style>
 </head>
@@ -268,165 +298,136 @@
         <div id="history"></div>
     </div>
     <script>
+        // --- Array soal lengkap ---
         const questions = [{
-                text: "「リンさんは だれ に プレゼントを あげましたか。」 Jawablah!",
-                options: ["キムさん", "まりさん", "母", "友だち"],
-                answer: 0
-            },
-            {
-                text: "「母 に 傘を 貸しました。」 Siapa penerima payung?",
-                options: ["Saya", "Ibu", "Kim-san", "Marie-san"],
-                answer: 1
-            },
-            {
-                text: "Apa fungsi partikel 「に」 pada kalimat '友だち に 手紙を 送ります。'?",
-                options: ["Kepada", "Dari", "Dengan", "Untuk"],
-                answer: 0
-            },
-            {
-                text: "「リンさんは だれ に 辞書を 借りましたか。」 Jawaban yang tepat adalah ...",
-                options: ["まりさん", "母", "自分", "友だち"],
-                answer: 0
-            },
-            {
-                text: "「りんごを いくつ 買いましたか。」 Jawabannya adalah ...",
-                options: ["ななつ", "よっつ", "いつつ", "みっつ"],
-                answer: 0
-            },
-            {
-                text: "Apa arti kata tanya 「いくつ」 pada Bab 10?",
-                options: ["Berapa (buah)", "Di mana", "Siapa", "Kapan"],
-                answer: 0
-            },
-            {
-                text: "Bagaimana menanyakan 'pakai alat apa makan sushi?' dalam bahasa Jepang?",
-                options: ["なんで すしを 食べますか。", "どこで すしを 食べますか。", "だれで すしを 食べますか。", "いつで すしを 食べますか。"],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang benar: 'Makan sushi dengan sumpit.'",
-                options: ["はし で すしを 食べます。", "はし に すしを 食べます。", "すし で はしを 食べます。", "はし を すしで 食べます。"],
-                answer: 0
-            },
-            {
-                text: "「教室 で 日本語を 勉強します。」 Fungsi partikel 「で」 adalah ...",
-                options: ["Tempat", "Arah", "Waktu", "Objek"],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang tepat: 'Menulis surat dengan pulpen.'",
-                options: ["ボールペン で 手紙を 書きます。", "手紙 で ボールペンを 書きます。", "ボールペン に 手紙を 書きます。", "手紙 を ボールペンで 書きます。"],
-                answer: 0
-            },
-            {
-                text: "「日曜日 に 友だち の 家 へ 行きます。」 Apa arti 「に」 pada kalimat di atas?",
-                options: ["Waktu", "Tempat alat", "Alat", "Objek"],
-                answer: 0
-            },
-            {
-                text: "「なんで 学校へ 行きますか。」 Jawaban yang benar ...",
-                options: ["くるまで 学校へ 行きます。", "学校で 行きます。", "うちで 行きます。", "ともだちに 行きます。"],
-                answer: 0
-            },
-            {
-                text: "「自転車 で スーパーへ 行きます。」 Bagaimana pergi ke supermarket?",
-                options: ["Dengan sepeda", "Dengan mobil", "Dengan teman", "Dengan bus"],
-                answer: 0
-            },
-            {
-                text: "Partikel yang digunakan untuk menyatakan alat pada aktivitas:",
-                options: ["で", "に", "の", "が"],
-                answer: 0
-            },
-            {
-                text: "「先生 に レポートを 出します。」 Siapa yang menerima laporan?",
-                options: ["Guru", "Siswa", "Teman", "Ibu"],
-                answer: 0
-            },
-            {
-                text: "Kalimat tanya yang benar untuk menanyakan 'Siapa yang menerima hadiah?'",
-                options: ["だれ に プレゼントを あげましたか。", "いつ に プレゼントを あげましたか。", "どこ に プレゼントを あげましたか。",
-                    "なん に プレゼントを あげましたか。"
-                ],
-                answer: 0
-            },
-            {
-                text: "「ともだち に コピーを あげます。」 Siapa yang memberi salinan?",
-                options: ["Saya", "Teman", "Guru", "Ibu"],
-                answer: 0
-            },
-            {
-                text: "Kalimat: 'Makan nasi dengan tangan.' bagaimana dalam bahasa Jepang?",
-                options: ["手 で ごはんを 食べます。", "ごはん で 手を 食べます。", "手 に ごはんを 食べます。", "ごはん を 手で 食べます。"],
-                answer: 0
-            },
-            {
-                text: "Bagaimana menanyakan jumlah apel yang dibeli?",
-                options: ["りんごを いくつ 買いましたか。", "りんごは どこで 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。"],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang benar untuk 'Ibu menerima bunga dari Marie-san.'",
-                options: ["母 は まりさん に 花を もらいました。", "母 は まりさん で 花を もらいました。", "母 は まりさん を 花で もらいました。",
-                    "母 は まりさん に 花で もらいました。"
-                ],
-                answer: 0
-            },
-            {
-                text: "Pilihan jawaban yang benar untuk 'Aku menerima hadiah dari teman.'",
-                options: ["わたし は ともだち に プレゼントを もらいました。", "わたし は ともだち に プレゼントを あげました。",
-                    "わたし は ともだち で プレゼントを もらいました。", "わたし は ともだち が プレゼントを もらいました。"
-                ],
-                answer: 0
-            },
-            {
-                text: "Maksud dari kalimat 'ともだち に 本を かしました。'",
-                options: ["Memberi pinjaman buku kepada teman", "Menerima buku dari teman",
-                    "Membaca buku bersama teman", "Menulis buku untuk teman"
-                ],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang benar untuk 'Menulis dengan pensil.'",
-                options: ["えんぴつ で 書きます。", "えんぴつ に 書きます。", "えんぴつ は 書きます。", "えんぴつ を 書きます。"],
-                answer: 0
-            },
-            {
-                text: "『だれ に あげましたか。』 cocok dijawab dengan ...",
-                options: ["ともだち に あげました。", "きょうしつ で あげました。", "はな で あげました。", "きょう に あげました。"],
-                answer: 0
-            },
-            {
-                text: "Cara bertanya 'Kepada siapa kamu mengirim surat?' dalam bahasa Jepang:",
-                options: ["だれ に 手紙を 送りましたか。", "どこ で 手紙を 送りましたか。", "なん で 手紙を 送りましたか。", "いつ に 手紙を 送りましたか。"],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang benar untuk 'Saya belajar Bahasa Jepang di perpustakaan.'",
-                options: ["図書館 で 日本語を 勉強します。", "日本語 の 図書館で 勉強します。", "日本語 で 図書館を 勉強します。", "図書館 が 日本語で 勉強します。"],
-                answer: 0
-            },
-            {
-                text: "Partikel yang tepat untuk tempat melakukan aktivitas:",
-                options: ["で", "に", "が", "を"],
-                answer: 0
-            },
-            {
-                text: "Bagaimana menulis 'Saya memilih ayam.' dengan pola Bab 10?",
-                options: ["とり に します。", "とり で します。", "とり を します。", "とり が します。"],
-                answer: 0
-            },
-            {
-                text: "Kalimat yang benar: 'Saya pergi ke sekolah dengan bus.'",
-                options: ["バス で 学校へ 行きます。", "バス に 学校へ 行きます。", "学校 で バスへ 行きます。", "バス を 学校へ 行きます。"],
-                answer: 0
-            },
-            {
-                text: "Cara menanyakan 'Berapa buah apel yang dibeli?' dalam bahasa Jepang:",
-                options: ["りんごを いくつ 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。", "りんごは どこで 買いましたか。"],
-                answer: 0
-            }
-        ];
+            text: "「リンさんは だれ に プレゼントを あげましたか。」 Jawablah!",
+            options: ["キムさん", "まりさん", "母", "友だち"],
+            answer: 0
+        }, {
+            text: "「母 に 傘を 貸しました。」 Siapa penerima payung?",
+            options: ["Saya", "Ibu", "Kim-san", "Marie-san"],
+            answer: 1
+        }, {
+            text: "Apa fungsi partikel 「に」 pada kalimat '友だち に 手紙を 送ります。'?",
+            options: ["Kepada", "Dari", "Dengan", "Untuk"],
+            answer: 0
+        }, {
+            text: "「リンさんは だれ に 辞書を 借りましたか。」 Jawaban yang tepat adalah ...",
+            options: ["まりさん", "母", "自分", "友だち"],
+            answer: 0
+        }, {
+            text: "「りんごを いくつ 買いましたか。」 Jawabannya adalah ...",
+            options: ["ななつ", "よっつ", "いつつ", "みっつ"],
+            answer: 0
+        }, {
+            text: "Apa arti kata tanya 「いくつ」 pada Bab 10?",
+            options: ["Berapa (buah)", "Di mana", "Siapa", "Kapan"],
+            answer: 0
+        }, {
+            text: "Bagaimana menanyakan 'pakai alat apa makan sushi?' dalam bahasa Jepang?",
+            options: ["なんで すしを 食べますか。", "どこで すしを 食べますか。", "だれで すしを 食べますか。", "いつで すしを 食べますか。"],
+            answer: 0
+        }, {
+            text: "Kalimat yang benar: 'Makan sushi dengan sumpit.'",
+            options: ["はし で すしを 食べます。", "はし に すしを 食べます。", "すし で はしを 食べます。", "はし を すしで 食べます。"],
+            answer: 0
+        }, {
+            text: "「教室 で 日本語を 勉強します。」 Fungsi partikel 「で」 adalah ...",
+            options: ["Tempat", "Arah", "Waktu", "Objek"],
+            answer: 0
+        }, {
+            text: "Kalimat yang tepat: 'Menulis surat dengan pulpen.'",
+            options: ["ボールペン で 手紙を 書きます。", "手紙 で ボールペンを 書きます。", "ボールペン に 手紙を 書きます。", "手紙 を ボールペンで 書きます。"],
+            answer: 0
+        }, {
+            text: "「日曜日 に 友だち の 家 へ 行きます。」 Apa arti 「に」 pada kalimat di atas?",
+            options: ["Waktu", "Tempat alat", "Alat", "Objek"],
+            answer: 0
+        }, {
+            text: "「なんで 学校へ 行きますか。」 Jawaban yang benar ...",
+            options: ["くるまで 学校へ 行きます。", "学校で 行きます。", "うちで 行きます。", "ともだちに 行きます。"],
+            answer: 0
+        }, {
+            text: "「自転車 で スーパーへ 行きます。」 Bagaimana pergi ke supermarket?",
+            options: ["Dengan sepeda", "Dengan mobil", "Dengan teman", "Dengan bus"],
+            answer: 0
+        }, {
+            text: "Partikel yang digunakan untuk menyatakan alat pada aktivitas:",
+            options: ["で", "に", "の", "が"],
+            answer: 0
+        }, {
+            text: "「先生 に レポートを 出します。」 Siapa yang menerima laporan?",
+            options: ["Guru", "Siswa", "Teman", "Ibu"],
+            answer: 0
+        }, {
+            text: "Kalimat tanya yang benar untuk menanyakan 'Siapa yang menerima hadiah?'",
+            options: ["だれ に プレゼントを あげましたか。", "いつ に プレゼントを あげましたか。", "どこ に プレゼントを あげましたか。",
+                "なん に プレゼントを あげましたか。"
+            ],
+            answer: 0
+        }, {
+            text: "「ともだち に コピーを あげます。」 Siapa yang memberi salinan?",
+            options: ["Saya", "Teman", "Guru", "Ibu"],
+            answer: 0
+        }, {
+            text: "Kalimat: 'Makan nasi dengan tangan.' bagaimana dalam bahasa Jepang?",
+            options: ["手 で ごはんを 食べます。", "ごはん で 手を 食べます。", "手 に ごはんを 食べます。", "ごはん を 手で 食べます。"],
+            answer: 0
+        }, {
+            text: "Bagaimana menanyakan jumlah apel yang dibeli?",
+            options: ["りんごを いくつ 買いましたか。", "りんごは どこで 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。"],
+            answer: 0
+        }, {
+            text: "Kalimat yang benar untuk 'Ibu menerima bunga dari Marie-san.'",
+            options: ["母 は まりさん に 花を もらいました。", "母 は まりさん で 花を もらいました。", "母 は まりさん を 花で もらいました。",
+                "母 は まりさん に 花で もらいました。"
+            ],
+            answer: 0
+        }, {
+            text: "Pilihan jawaban yang benar untuk 'Aku menerima hadiah dari teman.'",
+            options: ["わたし は ともだち に プレゼントを もらいました。", "わたし は ともだち に プレゼントを あげました。",
+                "わたし は ともだち で プレゼントを もらいました。", "わたし は ともだち が プレゼントを もらいました。"
+            ],
+            answer: 0
+        }, {
+            text: "Maksud dari kalimat 'ともだち に 本を かしました。'",
+            options: ["Memberi pinjaman buku kepada teman", "Menerima buku dari teman",
+                "Membaca buku bersama teman", "Menulis buku untuk teman"
+            ],
+            answer: 0
+        }, {
+            text: "Kalimat yang benar untuk 'Menulis dengan pensil.'",
+            options: ["えんぴつ で 書きます。", "えんぴつ に 書きます。", "えんぴつ は 書きます。", "えんぴつ を 書きます。"],
+            answer: 0
+        }, {
+            text: "『だれ に あげましたか。』 cocok dijawab dengan ...",
+            options: ["ともだち に あげました。", "きょうしつ で あげました。", "はな で あげました。", "きょう に あげました。"],
+            answer: 0
+        }, {
+            text: "Cara bertanya 'Kepada siapa kamu mengirim surat?' dalam bahasa Jepang:",
+            options: ["だれ に 手紙を 送りましたか。", "どこ で 手紙を 送りましたか。", "なん で 手紙を 送りましたか。", "いつ に 手紙を 送りましたか。"],
+            answer: 0
+        }, {
+            text: "Kalimat yang benar untuk 'Saya belajar Bahasa Jepang di perpustakaan.'",
+            options: ["図書館 で 日本語を 勉強します。", "日本語 の 図書館で 勉強します。", "日本語 で 図書館を 勉強します。", "図書館 が 日本語で 勉強します。"],
+            answer: 0
+        }, {
+            text: "Partikel yang tepat untuk tempat melakukan aktivitas:",
+            options: ["で", "に", "ga", "を"],
+            answer: 0
+        }, {
+            text: "Bagaimana menulis 'Saya memilih ayam.' dengan pola Bab 10?",
+            options: ["とり に します。", "とり で します。", "とり を します。", "とり が します。"],
+            answer: 0
+        }, {
+            text: "Kalimat yang benar: 'Saya pergi ke sekolah dengan bus.'",
+            options: ["バス で 学校へ 行きます。", "バス に 学校へ 行きます。", "学校 で バスへ 行きます。", "バス を 学校へ 行きます。"],
+            answer: 0
+        }, {
+            text: "Cara menanyakan 'Berapa buah apel yang dibeli?' dalam bahasa Jepang:",
+            options: ["りんごを いくつ 買いましたか。", "りんごは だれが 買いましたか。", "りんごは なんで 買いましたか。", "りんごは どこで 買いましたか。"],
+            answer: 0
+        }];
 
         const QUIZ_TIME_LIMIT = 3600;
         let currentIndex = 0;
@@ -434,7 +435,6 @@
         let timer = null;
         let timeLeft = QUIZ_TIME_LIMIT;
         let selectedOption = null;
-
         const studentNameInput = document.getElementById("studentName");
         const studentClassInput = document.getElementById("studentClass");
         const startBtn = document.getElementById("startBtn");
@@ -460,7 +460,6 @@
             startTimer();
             showQuestion();
             nextBtn.style.display = "block";
-            // Tambah baris ini untuk menyembunyikan tombol Mulai Kuis
             startBtn.style.display = "none";
         });
 
@@ -530,9 +529,7 @@
             resultDiv.classList.remove("hidden");
             resultDiv.className = keterangan === "Lulus" ? "passed" : "remedial";
             resultDiv.innerHTML =
-                `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> /
-<span>${total}</span><br><b>Nilai: ${nilaiAkhir}</b> <span>(${keterangan})</span>${penalti > 0 ? "<br><span
-    style='color:#ee3054'><b>Penalti screenshot: -" + penalti + "</b></span>" : ""}`;
+                `Nama: <span>${nama}</span><br>Kelas: <span>${kelas}</span><br>Skor: <span>${score}</span> / <span>${total}</span><br><b>Nilai: ${nilaiAkhir}</b> <span>(${keterangan})</span>${penalti > 0 ? "<br><span style='color:#ee3054'><b>Penalti screenshot: -" + penalti + "</b></span>" : ""}`;
 
             // Simpan ke localStorage dan kirim ke backend
             const record = {
@@ -550,7 +547,6 @@
             data.push(record);
             localStorage.setItem("daichi_bab10_results", JSON.stringify(data));
             showHistory();
-
             fetch('http://localhost:3000/hasil-kuis', {
                     method: 'POST',
                     headers: {
@@ -586,6 +582,7 @@
             historyDiv.innerHTML = html;
         }
         showHistory();
+
         // ==== Proteksi Copy, Paste, Cut dan Klik Kanan ====
         document.addEventListener('keydown', function (e) {
             const isQuizArea = e.target.closest('.question') || e.target.closest('.options');
